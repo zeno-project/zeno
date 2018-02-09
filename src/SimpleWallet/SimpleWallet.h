@@ -161,6 +161,7 @@ namespace CryptoNote
     uint16_t m_daemon_port;
 
     std::string m_wallet_file;
+    bool sync_from_zero;
 
     std::unique_ptr<std::promise<std::error_code>> m_initResultPromise;
 
