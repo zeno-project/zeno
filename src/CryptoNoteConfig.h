@@ -27,36 +27,36 @@ namespace parameters {
 const uint32_t CRYPTONOTE_MAX_BLOCK_NUMBER                   = 500000000;
 const size_t   CRYPTONOTE_MAX_BLOCK_BLOB_SIZE                = 500000000;
 const size_t   CRYPTONOTE_MAX_TX_SIZE                        = 1000000000;
-const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 196;
-const uint32_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW         = 20;
+const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 86;
+const uint32_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW         = 10;
 const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT            = 60 * 60 * 2;
 
 const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 
 // MONEY_SUPPLY - total number coins to be generated
-const uint64_t MONEY_SUPPLY                                  = UINT64_C(50000000000000000);
-const uint32_t ZAWY_DIFFICULTY_BLOCK_INDEX                 = 30;
+const uint64_t MONEY_SUPPLY                                  = UINT64_C(18446744073709551615);
+const uint32_t ZAWY_DIFFICULTY_BLOCK_INDEX                 = 0;
 const size_t ZAWY_DIFFICULTY_V2                          = 0;
-const uint8_t ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION   = 0;
-const unsigned EMISSION_SPEED_FACTOR                         = 25;
-const uint64_t GENESIS_BLOCK_REWARD                          = UINT64_C(1000000000000000);
+const uint8_t ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION   = 3;
+const unsigned EMISSION_SPEED_FACTOR                         = 18;
+const uint64_t GENESIS_BLOCK_REWARD                          = UINT64_C(5534023222112865000);
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
 const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               = 100;
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE     = 1000000; //size of block (bytes) after which reward for block calculated using block size
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  = 1000000;
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  = 100000;
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE     = 100000; //size of block (bytes) after which reward for block calculated using block size
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  = 20000;
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  = 10000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
 const size_t   CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE        = 600;
-const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 8;
-const uint64_t MINIMUM_FEE                                   = UINT64_C(100000000);
-const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(100000000);
+const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 12;
+const uint64_t MINIMUM_FEE                                   = UINT64_C(1000000);
+const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(1000000);
 
-const uint64_t DIFFICULTY_TARGET                             = 60; // seconds
+const uint64_t DIFFICULTY_TARGET                             = 120; // seconds
 const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 const size_t   DIFFICULTY_WINDOW                                = 17;
-const size_t   DIFFICULTY_WINDOW_V1                          = 1440;
-const size_t   DIFFICULTY_WINDOW_V2                          = 1440;
+const size_t   DIFFICULTY_WINDOW_V1                          = 720;
+const size_t   DIFFICULTY_WINDOW_V2                          = 720;
 const size_t   DIFFICULTY_CUT                                = 0;  // timestamps to cut after sorting
 const size_t   DIFFICULTY_CUT_V1                             = 60;
 const size_t   DIFFICULTY_CUT_V2                             = 60;
@@ -65,7 +65,7 @@ const size_t   DIFFICULTY_LAG_V1                             = 15;
 const size_t   DIFFICULTY_LAG_V2                             = 15;
 static_assert(2 * DIFFICULTY_CUT <= DIFFICULTY_WINDOW - 2, "Bad DIFFICULTY_WINDOW or DIFFICULTY_CUT");
 
-const size_t   MAX_BLOCK_SIZE_INITIAL                        = 1000000;
+const size_t   MAX_BLOCK_SIZE_INITIAL                        = 100000;
 const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR         = 100 * 1024;
 const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR       = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 
@@ -96,7 +96,7 @@ const char     P2P_NET_DATA_FILENAME[]                       = "p2pstate.bin";
 const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json";
 } // parameters
 
-const char     CRYPTONOTE_NAME[]                             = "Zeno";
+const char     CRYPTONOTE_NAME[]                             = "inbestcoin";
 
 const uint8_t  TRANSACTION_VERSION_1                         =  1;
 const uint8_t  TRANSACTION_VERSION_2                         =  2;
@@ -111,8 +111,8 @@ const size_t   BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT        =  10000;  //by def
 const size_t   BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
 const size_t   COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT         =  1000;
 
-const int      P2P_DEFAULT_PORT                              =  44187;
-const int      RPC_DEFAULT_PORT                              =  44188;
+const int      P2P_DEFAULT_PORT                              =  27174;
+const int      RPC_DEFAULT_PORT                              =  27175;
 
 const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
 const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
@@ -129,7 +129,7 @@ const uint64_t P2P_DEFAULT_INVOKE_TIMEOUT                    = 60 * 2 * 1000; //
 const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          // 5 seconds
 const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 
-const char* const SEED_NODES[] = { "35.188.37.164:44187", "35.227.163.150:44187" };
+const char* const SEED_NODES[] = { "54.71.107.179:27174", "34.208.210.150:27174" };
 
 
 struct CheckpointData {

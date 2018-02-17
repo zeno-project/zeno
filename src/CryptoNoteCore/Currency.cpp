@@ -94,7 +94,7 @@ bool Currency::generateGenesisBlock() {
   //std::string hex_tx_represent = Common::toHex(txb);
 
   // Hard code coinbase tx in genesis block, because through generating tx use random, but genesis should be always the same
-  std::string genesisCoinbaseTxHex = "011401ff000280808d93f5d771026b172d591e25cddce8523574a67a09a64d59a6ec9babe3e42db16509efe5b6be80808d93f5d771021a1ec4f62ac702a0d59d959dbaf562fed21c4c382f5880c1db36c253a7bd840621015ef97d476d882e0d79c7bace9f76e47a03e67beab5e19e9a86fcf4aaf8dc59c1";
+  std::string genesisCoinbaseTxHex = "010a01ff0001e895b3e6cc99b3e64c0254f0340a511e6dba2a38613fb8fb16cd5e4ac40a25a7dc58a86113f11d97d5642101ebd8f3595b2f8a0bf4844f1a10fca58aadf43c5e9fe76cf60a69aa023842073c";
   BinaryArray minerTxBlob;
 
   bool r =
@@ -465,39 +465,6 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
   if (timeSpan == 0) {
     timeSpan = 1;
   }
-  
-  		// begin sumo
-
-		uint64_t timespan_median = 0;
-		if (cutBegin > 0 && length >= cutBegin * 2 + 3) {
-			std::vector<std::uint64_t> time_spans;
-			for (size_t i = length - cutBegin * 2 - 3; i < length - 1; i++) {
-				uint64_t time_span = timestamps[i + 1] - timestamps[i];
-				if (time_span == 0) {
-					time_span = 1;
-				}
-				time_spans.push_back(time_span);
-
-				logger(DEBUGGING) << "Timespan " << i << ": " << (time_span / 60) / 60
-					<< ":" << (time_span > 3600 ? (time_span % 3600) / 60 : time_span / 60)
-					<< ":" << time_span % 60 << " (" << time_span << ")";
-			}
-			timespan_median = Common::medianValue(time_spans);
-		}
-
-		uint64_t timespan_length = length - cutBegin * 2 - 1;
-		logger(DEBUGGING) << "Timespan Median: " << timespan_median << ", Timespan Average: " << totalTimespan / timespan_length;
-
-		uint64_t total_timespan_median = timespan_median > 0 ? timespan_median * timespan_length : totalTimespan * 7 / 10;
-		uint64_t adjusted_total_timespan = (totalTimespan * 8 + total_timespan_median * 3) / 10; //  0.8A + 0.3M (the median of a poisson distribution is 70% of the mean, so 0.25A = 0.25/0.7 = 0.285M)
-		if (adjusted_total_timespan > MAX_AVERAGE_TIMESPAN * timespan_length) {
-			adjusted_total_timespan = MAX_AVERAGE_TIMESPAN * timespan_length;
-		}
-		if (adjusted_total_timespan < MIN_AVERAGE_TIMESPAN * timespan_length) {
-			adjusted_total_timespan = MIN_AVERAGE_TIMESPAN * timespan_length;
-		}
-
-		//end sumo
 
   Difficulty totalWork = cumulativeDifficulties[cutEnd - 1] - cumulativeDifficulties[cutBegin];
   assert(totalWork > 0);
@@ -508,16 +475,6 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
     return 0;
   }
 
-  //begin sumo
-		uint64_t next_diff = (low + adjusted_total_timespan - 1) / adjusted_total_timespan;
-		if (next_diff < 1) next_diff = 1;
-		logger(DEBUGGING) << "Total timespan: " << totalTimespan << ", Adjusted total timespan: "
-			<< adjusted_total_timespan << ", Total work: " << totalWork << ", Next diff: "
-			<< next_diff << ", Hashrate (H/s): " << next_diff / m_difficultyTarget;
-
-		return next_diff;
-		//end sumo
-  
   return (low + timeSpan - 1) / timeSpan;
 }
 
@@ -636,8 +593,8 @@ std::vector<uint64_t> cumulativeDifficulties_o(cumulativeDifficulties);
       return 0;
     }
     uint64_t nextDiffZ = low / timeSpan;
-    if (nextDiffZ <= 1) {
-      nextDiffZ = 1;
+    if (nextDiffZ <= 100) {
+      nextDiffZ = 100;
     }
     return nextDiffZ;
   }
@@ -734,6 +691,7 @@ m_moneySupply(currency.m_moneySupply),
 m_emissionSpeedFactor(currency.m_emissionSpeedFactor),
 m_rewardBlocksWindow(currency.m_rewardBlocksWindow),
 m_blockGrantedFullRewardZone(currency.m_blockGrantedFullRewardZone),
+m_isBlockexplorer(currency.m_isBlockexplorer),
 m_minerTxBlobReservedSize(currency.m_minerTxBlobReservedSize),
 m_numberOfDecimalPlaces(currency.m_numberOfDecimalPlaces),
 m_coin(currency.m_coin),
@@ -761,10 +719,10 @@ m_upgradeWindow(currency.m_upgradeWindow),
 m_blocksFileName(currency.m_blocksFileName),
 m_blockIndexesFileName(currency.m_blockIndexesFileName),
 m_txPoolFileName(currency.m_txPoolFileName),
+m_genesisBlockReward(currency.m_genesisBlockReward),
 m_zawyDifficultyBlockIndex(currency.m_zawyDifficultyBlockIndex),
 m_zawyDifficultyV2(currency.m_zawyDifficultyV2),
 m_zawyDifficultyBlockVersion(currency.m_zawyDifficultyBlockVersion),
-m_genesisBlockReward(currency.m_genesisBlockReward),
 m_testnet(currency.m_testnet),
 genesisBlockTemplate(std::move(currency.genesisBlockTemplate)),
 cachedGenesisBlock(new CachedBlock(genesisBlockTemplate)),
@@ -827,6 +785,7 @@ zawyDifficultyBlockVersion(parameters::ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION)
   blockIndexesFileName(parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME);
   txPoolFileName(parameters::CRYPTONOTE_POOLDATA_FILENAME);
 
+    isBlockexplorer(false);
   testnet(false);
 }
 
