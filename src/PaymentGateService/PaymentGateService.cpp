@@ -59,7 +59,7 @@ void changeDirectory(const std::string& path) {
 	throw std::runtime_error("Couldn't change directory to \'" + path + "\': " + strerror(errno));
   }
 #endif
-}
+ }
 
 void stopSignalHandler(PaymentGateService* pg) {
   pg->stop();

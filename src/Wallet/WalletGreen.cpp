@@ -571,7 +571,7 @@ void WalletGreen::loadContainerStorage(const std::string& path) {
     m_logger = Logging::LoggerRef(m_logger.getLogger(), "WalletGreen/" + podToHex(m_viewPublicKey).substr(0, 5));
 
 	//m_logger(DEBUGGING) << "Loaded wallet with private view key " << m_viewSecretKey << " ; public spend key " << m_viewPublicKey;
-
+ 	
     loadSpendKeys();
 
     m_logger(DEBUGGING) << "Container keys were successfully loaded";
@@ -791,7 +791,7 @@ void WalletGreen::loadSpendKeys() {
     }
 
 	//m_logger(DEBUGGING) << "Loaded wallet with private spend key " << wallet.spendSecretKey << " ; public spend key " << wallet.spendPublicKey;
-
+ 	
     wallet.actualBalance = 0;
     wallet.pendingBalance = 0;
     wallet.container = reinterpret_cast<CryptoNote::ITransfersContainer*>(i); //dirty hack. container field must be unique
@@ -2129,7 +2129,7 @@ size_t WalletGreen::validateSaveAndSendTransaction(const ITransactionReader& tra
 		  << transaction.getTransactionHash();
 	  throw std::system_error(make_error_code(error::INTERNAL_WALLET_ERROR), "Fusion transaction rejected");
   }
-
+  
   if (transactionData.size() > m_upperTransactionSizeLimit) {
     m_logger(ERROR, BRIGHT_RED) << "Transaction is too big. Transaction hash " << transaction.getTransactionHash() <<
       ", size " << transactionData.size() << ", size limit " << m_upperTransactionSizeLimit;
