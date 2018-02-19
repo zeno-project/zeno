@@ -466,39 +466,6 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
     timeSpan = 1;
   }
   
-  		// begin sumo
-
-		uint64_t timespan_median = 0;
-		if (cutBegin > 0 && length >= cutBegin * 2 + 3) {
-			std::vector<std::uint64_t> time_spans;
-			for (size_t i = length - cutBegin * 2 - 3; i < length - 1; i++) {
-				uint64_t time_span = timestamps[i + 1] - timestamps[i];
-				if (time_span == 0) {
-					time_span = 1;
-				}
-				time_spans.push_back(time_span);
-
-				logger(DEBUGGING) << "Timespan " << i << ": " << (time_span / 60) / 60
-					<< ":" << (time_span > 3600 ? (time_span % 3600) / 60 : time_span / 60)
-					<< ":" << time_span % 60 << " (" << time_span << ")";
-			}
-			timespan_median = Common::medianValue(time_spans);
-		}
-
-		uint64_t timespan_length = length - cutBegin * 2 - 1;
-		logger(DEBUGGING) << "Timespan Median: " << timespan_median << ", Timespan Average: " << totalTimespan / timespan_length;
-
-		uint64_t total_timespan_median = timespan_median > 0 ? timespan_median * timespan_length : totalTimespan * 7 / 10;
-		uint64_t adjusted_total_timespan = (totalTimespan * 8 + total_timespan_median * 3) / 10; //  0.8A + 0.3M (the median of a poisson distribution is 70% of the mean, so 0.25A = 0.25/0.7 = 0.285M)
-		if (adjusted_total_timespan > MAX_AVERAGE_TIMESPAN * timespan_length) {
-			adjusted_total_timespan = MAX_AVERAGE_TIMESPAN * timespan_length;
-		}
-		if (adjusted_total_timespan < MIN_AVERAGE_TIMESPAN * timespan_length) {
-			adjusted_total_timespan = MIN_AVERAGE_TIMESPAN * timespan_length;
-		}
-
-		//end sumo
-
   Difficulty totalWork = cumulativeDifficulties[cutEnd - 1] - cumulativeDifficulties[cutBegin];
   assert(totalWork > 0);
 
@@ -508,16 +475,6 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
     return 0;
   }
 
-  //begin sumo
-		uint64_t next_diff = (low + adjusted_total_timespan - 1) / adjusted_total_timespan;
-		if (next_diff < 1) next_diff = 1;
-		logger(DEBUGGING) << "Total timespan: " << totalTimespan << ", Adjusted total timespan: "
-			<< adjusted_total_timespan << ", Total work: " << totalWork << ", Next diff: "
-			<< next_diff << ", Hashrate (H/s): " << next_diff / m_difficultyTarget;
-
-		return next_diff;
-		//end sumo
-  
   return (low + timeSpan - 1) / timeSpan;
 }
 
