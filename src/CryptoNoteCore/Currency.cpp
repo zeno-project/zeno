@@ -465,7 +465,7 @@ Difficulty Currency::nextDifficulty(std::vector<uint64_t> timestamps,
   if (timeSpan == 0) {
     timeSpan = 1;
   }
-  
+
   Difficulty totalWork = cumulativeDifficulties[cutEnd - 1] - cumulativeDifficulties[cutBegin];
   assert(totalWork > 0);
 
@@ -691,6 +691,7 @@ m_moneySupply(currency.m_moneySupply),
 m_emissionSpeedFactor(currency.m_emissionSpeedFactor),
 m_rewardBlocksWindow(currency.m_rewardBlocksWindow),
 m_blockGrantedFullRewardZone(currency.m_blockGrantedFullRewardZone),
+m_isBlockexplorer(currency.m_isBlockexplorer),
 m_minerTxBlobReservedSize(currency.m_minerTxBlobReservedSize),
 m_numberOfDecimalPlaces(currency.m_numberOfDecimalPlaces),
 m_coin(currency.m_coin),
@@ -784,6 +785,7 @@ zawyDifficultyBlockVersion(parameters::ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION)
   blockIndexesFileName(parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME);
   txPoolFileName(parameters::CRYPTONOTE_POOLDATA_FILENAME);
 
+    isBlockexplorer(false);
   testnet(false);
 }
 
